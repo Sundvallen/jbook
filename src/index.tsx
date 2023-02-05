@@ -1,19 +1,59 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import * as esbuild from "esbuild-wasm";
+import { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
+import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const App = () => {
+  const ref = useRef<any>();
+  const [input, setInput] = useState("");
+  const [code, setCode] = useState("");
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  useEffect(() => {
+    startService();
+  }, []);
+
+  const startService = async () => {
+    // Setup wasm esbuild service
+    // Assign it to a ref
+    ref.current = await esbuild.startService({
+      worker: true,
+      // running esbuild compiler IN browser
+      wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
+    });
+  };
+
+  const onClick = async () => {
+    if (!ref.current) {
+      return;
+    }
+    const res = await ref.current.build({
+      entryPoints: ["index.js"],
+      bundle: true,
+      write: false,
+      // Pass the input value to the esbuild compiler plugin
+      plugins: [unpkgPathPlugin(input)],
+      define: {
+        "process.env.NODE_ENV": '"production"',
+        global: "window",
+      },
+    });
+
+    // console.log(res);
+
+    setCode(res.outputFiles[0].text);
+  };
+  return (
+    <div>
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      ></textarea>
+      <div>
+        <button onClick={onClick}>Submit</button>
+      </div>
+      <pre>{code}</pre>
+    </div>
+  );
+};
+
+ReactDOM.render(<App />, document.querySelector("#root"));
