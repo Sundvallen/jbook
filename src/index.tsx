@@ -42,6 +42,8 @@ const App = () => {
     // console.log(res);
 
     setCode(res.outputFiles[0].text);
+
+    // eval(res.outputFiles[0].text);
   };
   return (
     <div>
