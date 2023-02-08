@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ResizableBox, ResizableBoxProps } from "react-resizable";
 import "./Resizable.css";
 interface ResizableProps {
@@ -7,9 +7,25 @@ interface ResizableProps {
 }
 
 const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
+  const [innerHeight, setInnerHeight] = useState(window.innerHeight);
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(window.innerWidth * 0.75);
+
   useEffect(() => {
+    let timer: any;
+    // Debounce the resize event
     const listener = () => {
-      console.log(window.innerWidth, window.innerHeight);
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        setInnerHeight(window.innerHeight);
+        setInnerWidth(window.innerWidth);
+        // Fix bug when resizing the window to smaller than the user set width of the element
+        if (window.innerWidth * 0.75 < width) {
+          setWidth(window.innerWidth * 0.75);
+        }
+      }, 100);
     };
     window.addEventListener("resize", listener);
 
@@ -21,17 +37,20 @@ const Resizable: React.FC<ResizableProps> = ({ direction, children }) => {
   let resizableBoxProps: ResizableBoxProps;
   if (direction === "horizontal") {
     resizableBoxProps = {
-      minConstraints: [window.innerWidth * 0.2, Infinity],
-      maxConstraints: [window.innerWidth * 0.75, Infinity],
+      minConstraints: [innerWidth * 0.2, Infinity],
+      maxConstraints: [innerWidth * 0.75, Infinity],
       height: Infinity,
       className: "resize-horizontal",
-      width: window.innerWidth * 0.75,
+      width: width,
       resizeHandles: ["e"],
+      onResizeStop: (event, data) => {
+        setWidth(data.size.width);
+      },
     };
   } else {
     resizableBoxProps = {
-      minConstraints: [Infinity, window.innerHeight * 0.1],
-      maxConstraints: [Infinity, window.innerHeight * 0.9],
+      minConstraints: [Infinity, innerHeight * 0.1],
+      maxConstraints: [Infinity, innerHeight * 0.9],
       height: 300,
       width: Infinity,
       resizeHandles: ["s"],
