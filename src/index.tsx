@@ -1,13 +1,14 @@
-import "bulmaswatch/superhero/bulmaswatch.min.css";
 import ReactDOM from "react-dom";
-import CodeCell from "./components/CodeCell";
+import { Provider } from "react-redux";
+import App from "./App";
+import { store } from "./store/store";
 
-const App = () => {
+const Index = () => {
   return (
-    <div>
-      <CodeCell />
-    </div>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 };
 
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<Index />, document.querySelector("#root"));
