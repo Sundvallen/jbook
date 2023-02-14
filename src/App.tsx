@@ -4,12 +4,14 @@ import TextEditor from "./components/TextEditor/TextEditor";
 import "bulmaswatch/superhero/bulmaswatch.min.css";
 import { useSelector } from "./store/hooks";
 import { RootState } from "./store/store";
+import { CellsData } from "./features/cells/initialState";
 
 export default function App() {
-  const cells = useSelector((state: RootState) => state.data);
+  const state = useSelector((state: RootState) => state);
   return (
     <div>
-      {Object.entries(cells).map(([id, cell]) => {
+      {state.order.map((id) => {
+        const cell = state.data[id];
         if (cell.type === "code") {
           return <CodeCell content={cell.content} />;
         } else {

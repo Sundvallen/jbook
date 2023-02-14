@@ -14,14 +14,17 @@ interface MoveCellPayload {
   direction: "up" | "down";
 }
 
-interface InsertCellBeforePayload {
-  id: string;
+interface InsertCellPayload {
+  id: string | null;
   type: CellTypes;
 }
+
+interface FetchCellsPayload {}
 
 export type {
   UpdateCellPayload,
   DeleteCellPayload,
   MoveCellPayload,
-  InsertCellBeforePayload,
+  InsertCellPayload,
+  FetchCellsPayload,
 };
