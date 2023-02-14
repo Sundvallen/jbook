@@ -1,0 +1,30 @@
+.buttons-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease-in 0.08s;
+}
+
+.buttons-container.visible {
+  opacity: 1;
+}
+
+.buttons-container:hover {
+  opacity: 1;
+}
+
+.buttons-container .button {
+  margin: 0 40px;
+}
+
+.divider {
+  position: absolute;
+  top: 50%;
+  z-index: -1;
+  bottom: 50%;
+  width: 90%;
+  height: 1px;
+  background-color: #37414b;
+}

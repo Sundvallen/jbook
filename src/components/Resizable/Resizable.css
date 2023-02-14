@@ -1,5 +1,7 @@
 .react-resizable-handle {
   display: block;
+  position: relative;
+z-index: 10;
   background-color: #37414b;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -7,11 +9,13 @@
 
 .resize-horizontal {
   display: flex;
+  height: 100%;
   flex-direction: row;
 }
- 
+
 .react-resizable-handle-s {
   height: 10px;
+  border-radius: 0 0 10px 10px;
   width: 100%;
   cursor: row-resize;
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');

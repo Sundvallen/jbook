@@ -3,19 +3,21 @@ import CodeEditor from "../CodeEditor/CodeEditor";
 import Preview from "../Preview/Preview";
 import bundler from "../../bundler";
 import Resizable from "../Resizable/Resizable";
+import { Cell } from "../../features/cells/initialState";
+import { updateCell } from "../../features/cells/cellsSlice";
+import { useDispatch } from "../../store/hooks";
 
 interface CodeCellProps {
-  content: string;
+  cell: Cell;
 }
 
-const CodeCell: React.FC<CodeCellProps> = ({ content }) => {
-  const [input, setInput] = useState(content);
+const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   const [code, setCode] = useState("");
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const timer = setTimeout(async () => {
       // Send input to bundler and get bundled code
-      const output = await bundler(input);
+      const output = await bundler(cell.content);
       // Code which will be displayed in Preview
       setCode(output);
     }, 1000);
@@ -23,13 +25,13 @@ const CodeCell: React.FC<CodeCellProps> = ({ content }) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [input]);
+  }, [cell.content]);
 
   return (
     <Resizable direction="vertical">
       <div
         style={{
-          height: "100%",
+          height: "calc(100% - 10px)",
           width: "100%",
           display: "flex",
           flexDirection: "row",
@@ -37,8 +39,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ content }) => {
       >
         <Resizable direction="horizontal">
           <CodeEditor
-            initialValue={content}
-            onChange={(value) => setInput(value)}
+            initialValue={cell.content}
+            onChange={(value) =>
+              dispatch(updateCell({ id: cell.id, content: value }))
+            }
           />
         </Resizable>
         <Preview code={code} />

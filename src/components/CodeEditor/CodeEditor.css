@@ -16,3 +16,12 @@
 .editorWrapper:hover .button-format {
   opacity: 0.8;
 }
+
+.monaco-editor {
+  padding: 10px 0 ;
+  border-radius: 10px 0;
+}
+
+.overflow-guard {
+  border-radius: 0 0 0 10px;
+}

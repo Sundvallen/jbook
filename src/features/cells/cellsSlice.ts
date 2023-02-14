@@ -49,7 +49,7 @@ export const cellsSlice = createSlice({
       if (index < 0) {
         state.order.push(cell.id);
       } else {
-        state.order.splice(index + 1, 0, cell.id);
+        state.order.splice(index, 0, cell.id);
       }
     },
   },

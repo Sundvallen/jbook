@@ -1,11 +1,15 @@
 .preview {
   cursor: pointer;
-   height: 100%;
-}
-
+   height: calc(100% - 10px);
+  }
+  
 .wmde-markdown {
   cursor: pointer;
   height: 100%;
+  margin: 0 auto;
+  border-radius: 10px 10px 0 0;
+  padding: 10px;
+  background-color: #0d1117;
 }
 
 .text-editor {

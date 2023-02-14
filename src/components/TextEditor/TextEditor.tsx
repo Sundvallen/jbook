@@ -2,13 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import "./TextEditor.css";
 import Resizable from "../Resizable/Resizable";
+import { Cell } from "../../features/cells/initialState";
+import { useDispatch } from "../../store/hooks";
+import { updateCell } from "../../features/cells/cellsSlice";
 
 interface TextEditorProps {
-  content: string;
+  cell: Cell;
 }
 
-const TextEditor: React.FC<TextEditorProps> = ({ content }) => {
-  const [value, setValue] = useState<string | undefined>(content);
+const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
+  const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
   const editorRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,8 +38,13 @@ const TextEditor: React.FC<TextEditorProps> = ({ content }) => {
   if (editing) {
     return (
       <div className="text-editor card" ref={editorRef}>
-        <div className="card-content">
-          <MDEditor value={value} onChange={(val) => setValue(val)} />
+        <div className="">
+          <MDEditor
+            value={cell.content}
+            onChange={(val) =>
+              dispatch(updateCell({ id: cell.id, content: val || "" }))
+            }
+          />
         </div>
       </div>
     );
@@ -45,7 +53,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ content }) => {
   return (
     <Resizable direction="vertical">
       <div className="text-editor preview" onClick={() => setEditing(true)}>
-        <MDEditor.Markdown source={value || "Click to edit"} />
+        <MDEditor.Markdown source={cell.content || "Click to edit"} />
       </div>
     </Resizable>
   );

@@ -1,0 +1,21 @@
+.action-bar {
+  position: absolute;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+
+.action-bar button {
+  padding: 5px;
+}
+
+.action-bar:hover {
+  opacity: 1;
+}
+
+button:last-of-type {
+  /* top right */
+  border-radius: 0 10px 0 0;
+}
