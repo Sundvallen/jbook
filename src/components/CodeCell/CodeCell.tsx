@@ -1,32 +1,40 @@
-import { useState, useEffect } from "react";
 import CodeEditor from "../CodeEditor/CodeEditor";
 import Preview from "../Preview/Preview";
-import bundler from "../../bundler";
 import Resizable from "../Resizable/Resizable";
 import { Cell } from "../../features/cells/initialState";
 import { updateCell } from "../../features/cells/cellsSlice";
-import { useDispatch } from "../../store/hooks";
+import { useDispatch, useSelector } from "../../store/hooks";
+import { createBundle } from "../../features/bundles/bundlesSlice";
+import { useEffect } from "react";
 
 interface CodeCellProps {
   cell: Cell;
 }
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-  const [code, setCode] = useState("");
+  // const [code, setCode] = useState("");
   const dispatch = useDispatch();
+  const bundle = useSelector((state) => state.bundles[cell.id]);
+
+  const dispatchCreateBundle = () => {
+    createBundle({
+      payload: { cellId: cell.id, input: cell.content },
+      type: "bundles/createBundle",
+    });
+  };
+
   useEffect(() => {
+    if (!bundle) {
+      dispatchCreateBundle();
+      return;
+    }
     const timer = setTimeout(async () => {
-      // Send input to bundler and get bundled code
-      const output = await bundler(cell.content);
-      // Code which will be displayed in Preview
-      setCode(output);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [cell.content]);
-
+      dispatchCreateBundle();
+      return () => {
+        clearTimeout(timer);
+      };
+    }, 750);
+  }, [cell.content, cell.id]);
   return (
     <Resizable direction="vertical">
       <div
@@ -45,7 +53,11 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             }
           />
         </Resizable>
-        <Preview code={code} />
+        {!bundle || bundle.loading ? (
+          <div>Loading...</div>
+        ) : (
+          <Preview code={bundle.code} err={bundle.err} />
+        )}
       </div>
     </Resizable>
   );

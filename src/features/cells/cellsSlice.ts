@@ -47,9 +47,9 @@ export const cellsSlice = createSlice({
       state.data[cell.id] = cell;
       const index = state.order.findIndex((cellId) => cellId === id);
       if (index < 0) {
-        state.order.push(cell.id);
+        state.order.unshift(cell.id);
       } else {
-        state.order.splice(index, 0, cell.id);
+        state.order.splice(index + 1, 0, cell.id);
       }
     },
   },

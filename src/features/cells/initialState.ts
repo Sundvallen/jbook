@@ -15,22 +15,9 @@ export interface CellsState {
   order: string[];
 }
 
-const data = {
-  1: {
-    id: "1",
-    type: "text",
-    content: "Hello World",
-  },
-  2: {
-    id: "2",
-    type: "code",
-    content: "console.log('Hello World')",
-  },
-};
-
 export const initialState: CellsState = {
-  data,
+  data: {},
   loading: false,
   error: null,
-  order: ["1", "2"],
+  order: [],
 };

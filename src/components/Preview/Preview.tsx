@@ -1,7 +1,10 @@
 import React, { useEffect, useRef } from "react";
+import { Bundle } from "../../features/bundles/bundlesSlice";
+import { RootState } from "../../store/store";
 import "./Preview.css";
 interface PreviewProps {
   code: string;
+  err: string;
 }
 
 const html = `
@@ -33,7 +36,7 @@ const Preview: React.FC<PreviewProps> = ({ code }) => {
 
     // Wait for the iframe to load
     setTimeout(() => {
-      // Message the ifra with the compiled code
+      // Message the iframe with the compiled code
       iframe.current.contentWindow.postMessage(code, "*");
     }, 50);
   }, [code]);
