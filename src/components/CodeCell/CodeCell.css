@@ -1,0 +1,28 @@
+.progress-cover {
+  height: 100%;
+  flex-grow: 1;
+  background-color: white;
+  display: flex;
+  flex-direction: column-reverse;
+
+}
+
+/* setup opacity animation */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.progress-bar-container {
+  animation: fade-in 0.5s ease-in-out forwards !important;
+}
+
+.progress-bar {
+  border-radius: 0px !important;
+  bottom: 10px;
+  width: 100%;
+}

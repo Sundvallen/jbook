@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import CodeEditor from "../CodeEditor/CodeEditor";
 import Preview from "../Preview/Preview";
 import Resizable from "../Resizable/Resizable";
@@ -5,8 +7,7 @@ import { Cell } from "../../features/cells/initialState";
 import { updateCell } from "../../features/cells/cellsSlice";
 import { useDispatch, useSelector } from "../../store/hooks";
 import { createBundle } from "../../features/bundles/bundlesSlice";
-import { useEffect } from "react";
-
+import "./CodeCell.css";
 interface CodeCellProps {
   cell: Cell;
 }
@@ -54,7 +55,16 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
           />
         </Resizable>
         {!bundle || bundle.loading ? (
-          <div>Loading...</div>
+          <div className="progress-cover">
+            <div className="progress-bar-container">
+              <progress
+                className="progress-bar progress is-small is-primary"
+                max="100"
+              >
+                Loading
+              </progress>
+            </div>
+          </div>
         ) : (
           <Preview code={bundle.code} err={bundle.err} />
         )}
