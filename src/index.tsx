@@ -1,7 +1,9 @@
-import ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./App";
 import { store } from "./store/store";
+
+const rootNode: Element = document.querySelector("#root")!;
 
 const Index = () => {
   return (
@@ -11,4 +13,4 @@ const Index = () => {
   );
 };
 
-ReactDOM.render(<Index />, document.querySelector("#root"));
+ReactDOM.createRoot(rootNode).render(<Index />);
