@@ -13,7 +13,7 @@ interface CodeCellProps {
   cell: Cell;
 }
 
-const selectBundles = (state: RootState, cellId: string) => {
+const selectCumulativeCode = (state: RootState, cellId: string) => {
   const { data, order } = state.cells;
   const orderedCells = order.map((id) => data[id]);
   const cumulativeCode = [];
@@ -32,11 +32,11 @@ const selectBundles = (state: RootState, cellId: string) => {
 };
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
-  // const [code, setCode] = useState("");
   const dispatch = useDispatch();
   const bundle = useSelector((state) => state.bundles[cell.id]);
-  const cumulativeCode = useSelector((state) => selectBundles(state, cell.id));
-
+  const cumulativeCode = useSelector((state) =>
+    selectCumulativeCode(state, cell.id)
+  );
   const dispatchCreateBundle = () => {
     dispatch(
       createBundle({
@@ -53,12 +53,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
       dispatchCreateBundle();
       return;
     }
-
     // debounce the bundle creation when user is typing
     const timer = setTimeout(async () => {
       dispatchCreateBundle();
     }, 750);
-
     return () => {
       clearTimeout(timer);
     };
@@ -94,7 +92,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             </div>
           </div>
         ) : (
-          <Preview code={cumulativeCode.join("\n")} err={bundle.err} />
+          <Preview code={bundle.code} err={bundle.err} />
         )}
       </div>
     </Resizable>
